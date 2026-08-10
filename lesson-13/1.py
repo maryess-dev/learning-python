@@ -3,13 +3,14 @@ import random
 matrix_1 = []
 matrix_2 = []
 matrix_3=[]
-rows = 10
-cols = 10
+rows = int(input("Кол-во строк: "))
+cols = int(input("Кол-во колонок: "))
+
 
 for i in range(rows):
   row_1 = []
   row_2 = []
-  for j in range(10):
+  for j in range(cols):
     row_1.append(random.randint(-100, 100))
     row_2.append(random.randint(-100, 100))
   matrix_1.append(row_1)
