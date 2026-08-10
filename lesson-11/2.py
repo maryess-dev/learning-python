@@ -20,11 +20,16 @@ pets = {
 }
 
 def create():
-  last = collections.deque(pets, maxlen=1)[0]
+  if pets:
+    last = collections.deque(pets, maxlen=1)[0]
+  else:
+    last = 0
+  
   animal_type = input("Введите вид питомца: ")
   animal_age = int(input("Введите возраст питомца: "))
   animal_name = input("Введите кличку питомца: ")
   client_name = input("Введите ваше имя: ")
+
   pets[last + 1] = {
     animal_name: {
     "Вид питомца": animal_type,
@@ -44,6 +49,50 @@ def get_suffix(age):
   if age%10>1 and age%10<5:
     return "года" 
 
+def read():
+  pet_id = int(input("Введите ID питомца: "))
+  pet = get_pet(pet_id)
+  if pet:
+    for name, details in pet.items():
+      age = details["Возраст питомца"]
+      print(
+        f'Это {details["Вид питомца"]} по кличке "{name}". '
+        f'Возраст питомца: {age} {get_suffix(age)}. Имя владельца: {details["Имя владельца"]}'
+      )
+  else:
+    print("Питомец с таким ID не найден")
+
+def update():
+  pet_id = int(input("Введите ID питомца: "))
+  pet = get_pet(pet_id)
+
+  if not pet:
+    print("Питомец с таким ID не найден")
+    return;
+
+  animal_type = input("Введите вид питомца: ")
+  animal_age = int(input("Введите возраст питомца: "))
+  animal_name = input("Введите кличку питомца: ")
+  client_name = input("Введите ваше имя: ")
+
+  pets[pet_id] = {
+    animal_name: {
+      "Вид питомца": animal_type,
+            "Возраст питомца": animal_age,
+            "Имя владельца": client_name
+    }
+  }
+
+  print(f'Запись с ID {pet_id} успешно обновлена!')
+
+def delete():
+  pet_id = int(input("Введите ID питомца для удаления: "))
+  if pet_id in pets:
+    del pets[pet_id]
+    print(f"Запись с ID {pet_id} успешно удалена!")
+  else:
+    print("Питомец с таким ID не найден")
+
 def pets_list():
   for pet_id, pet_info in pets.items():
     for name, details in pet_info.items():
@@ -58,24 +107,18 @@ def pets_list():
 command = "start"
 
 while command != "stop":
-  command = input(
-  "\nВведите команду (create - создать, get - получить по ID, list - список, stop - выйти): ").strip().lower()
+  command = input("\nВведите команду (create, read, update, delete, list, stop): ").strip().lower()
 
-  if command == 'create': 
-    { create()}
-  elif command == "get":
-    pet_id = int(input("Введите ID питомца: "))
-    pet = get_pet(pet_id)
-    if pet:
-      for name, details in pet.items():
-        age = details["Возраст питомца"]
-        print(
-          f'Это {details["Вид питомца"]} по кличке "{name}". '
-          f'Возраст питомца: {age} {get_suffix(age)}. Владелец: {details["Имя владельца"]}'
-        )
-    else:
-      print("Питомец с таким ID не найден.")
-  if command == "list": 
+  if command == "create":
+    create()
+  elif command == "read":
+    read()
+  elif command == "update":
+    update()
+  elif command == "delete":
+    delete()
+  elif command == "list":
     pets_list()
-
+  elif command == "stop":
+    print("Конец работы")
 
